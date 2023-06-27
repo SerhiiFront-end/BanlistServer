@@ -42,7 +42,9 @@ async function banlistLoad(server) {
 		)
 	}, 6000)
 }
-
+app.get('/', async (req, res) => {
+	res.send('YOU WON!')
+})
 app.get('/banlist/web/:server', async (req, res) => {
 	const banlist = require(`./public/banlists${req.params.server}banlist.json`)
 	res.json(banlist)
