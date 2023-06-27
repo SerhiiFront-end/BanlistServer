@@ -30,7 +30,7 @@ async function banlistLoad(server) {
 		const result = matches.map(match => match.slice(0, -1) + '.')
 		await browser.close()
 		fs.writeFile(
-			`./banlists/${server}banlist.json`,
+			`./public/banlists${server}banlist.json`,
 			JSON.stringify(result),
 			err => {
 				if (err) {
@@ -44,7 +44,7 @@ async function banlistLoad(server) {
 }
 
 app.get('/banlist/web/:server', async (req, res) => {
-	const banlist = require(`./banlists/${req.params.server}banlist.json`)
+	const banlist = require(`./public/banlists${req.params.server}banlist.json`)
 	res.json(banlist)
 })
 cron.schedule(
