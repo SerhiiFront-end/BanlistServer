@@ -59,9 +59,6 @@ cron.schedule(
 		timezone: 'Europe/Moscow',
 	}
 )
-app.get('/pri', async (req, res) => {
-	await setTimeout(() => res.send('Пппп'), 3000)
-})
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`)
 })
