@@ -56,7 +56,6 @@ cron.schedule(
 		banlistLoad('rpg')
 		banlistLoad('2rp')
 	},
-	// hello
 	{
 		scheduled: true,
 		timezone: 'Europe/Moscow',
