@@ -61,13 +61,16 @@ app.get('/', async (req, res) => {
 })
 app.get('/banlist/web/:server', async (req, res) => {
 	const banlist = await Schema.findOne({ server: req.params.server })
-	res.send(banlist.results)
+	if (banlist) {
+		return res.send(banlist.results)
+	}
+	return res.send('DataBase id not found.')
 })
 cron.schedule(
 	'0 */5 * * * *',
 	() => {
-		banlistLoad('1rp')
 		banlistLoad('rpg')
+		banlistLoad('1rp')
 		banlistLoad('2rp')
 	},
 	{
