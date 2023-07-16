@@ -1,7 +1,20 @@
 const express = require('express')
 const puppeteer = require('puppeteer')
-const fs = require('fs')
+const mongoose = require('mongoose')
 const cron = require('node-cron')
+const Schema = require('./models/Schema')
+
+mongoose
+	.connect('mongodb+srv://aorl9048:1@banlists.1pjdhbt.mongodb.net/database', {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => {
+		console.log('Успешное подключение к базе данных!')
+	})
+	.catch(error => {
+		console.error('Ошибка подключения к базе данных:', error)
+	})
 
 const port = process.env.PORT || 3000
 const app = express()
@@ -29,25 +42,26 @@ async function banlistLoad(server) {
 		const matches = decodedText.match(/\[(\d{2}:\d{2}:\d{4})\].*?\..*?/g)
 		const result = matches.map(match => match.slice(0, -1) + '.')
 		await browser.close()
-		fs.writeFile(
-			`./public/banlists/${server}banlist.json`,
-			JSON.stringify(result),
-			err => {
-				if (err) {
-					console.error('Ошибка при записи файла:', err)
-				} else {
-					console.log(`Запись в файл успешно выполнена, сервер: ${server}.`)
-				}
-			}
-		)
+
+		const checkData = await Schema.findOne({ server: server })
+		if (checkData) {
+			Schema.findOneAndUpdate({ server: server }, { results: result })
+			return 0
+		}
+
+		const newData = new Schema({
+			results: result,
+			server: server,
+		})
+		newData.save()
 	}, 6000)
 }
 app.get('/', async (req, res) => {
-	res.send('YOU WON!')
+	res.send('go to the /banlist/web/ YOUR SERVER')
 })
 app.get('/banlist/web/:server', async (req, res) => {
-	const banlist = require(`./public/banlists/${req.params.server}banlist.json`)
-	res.json(banlist)
+	const banlist = await Schema.findOne({ server: req.params.server })
+	res.send(banlist.results)
 })
 cron.schedule(
 	'0 */5 * * * *',
