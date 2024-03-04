@@ -37,17 +37,18 @@ async function banlistLoad(server) {
 		)
 	}, 6000)
 }
-cron.schedule(
-	'* * * * *',
-	// cron.schedule(
-	// 	'0 */1 * * * *',
-	() => {
-		banlistLoad('1rp')
-		banlistLoad('2rp')
-		banlistLoad('rpg')
-	},
-	{
-		scheduled: true,
-		timezone: 'Europe/Moscow',
-	}
-)
+// cron.schedule(
+// 	'0 */1 * * * *',
+
+// cron.schedule(
+// 	'* * * * *',
+// 	() => {
+banlistLoad('1rp')
+banlistLoad('2rp')
+banlistLoad('rpg')
+// 	},
+// 	{
+// 		scheduled: true,
+// 		timezone: 'Europe/Moscow',
+// 	}
+// )
