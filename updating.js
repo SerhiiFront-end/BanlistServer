@@ -40,15 +40,15 @@ async function banlistLoad(server) {
 // cron.schedule(
 // 	'0 */1 * * * *',
 
-// cron.schedule(
-// 	'* * * * *',
-// 	() => {
-banlistLoad('1rp')
-banlistLoad('2rp')
-banlistLoad('rpg')
-// 	},
-// 	{
-// 		scheduled: true,
-// 		timezone: 'Europe/Moscow',
-// 	}
-// )
+cron.schedule(
+	'* * * * *',
+	() => {
+		banlistLoad('1rp')
+		banlistLoad('2rp')
+		banlistLoad('rpg')
+	},
+	{
+		scheduled: true,
+		timezone: 'Europe/Moscow',
+	}
+)
