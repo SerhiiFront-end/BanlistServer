@@ -53,8 +53,8 @@ cron.schedule(
 	'* * * * *',
 	() => {
 		banlistLoad('1rp')
-		// banlistLoad('2rp')
-		// banlistLoad('rpg')
+		banlistLoad('2rp')
+		banlistLoad('rpg')
 	},
 	{
 		scheduled: true,
