@@ -14,8 +14,8 @@
 	],
 	"crons": [
 		{
-			"path": "/auto.js",
-			"schedule": "50 4 * * *"
+			"path": "/index.js",
+			"schedule": "12 5 * * *"
 		}
 	]
 }
