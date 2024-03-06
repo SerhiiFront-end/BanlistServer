@@ -5,6 +5,15 @@ const fullBans = {
 	'1rp': [],
 	'2rp': [],
 }
+function decodeUnicodeEscapes(text) {
+	return text.replace(/\\u([\d\w]{4})|\\/gi, function (match, grp) {
+		if (match === '\\') {
+			return ''
+		} else {
+			return String.fromCharCode(parseInt(grp, 16))
+		}
+	})
+}
 async function banlistLoad(server) {
 	const browser = await puppeteer.launch({ headless: 'new' })
 	const page = await browser.newPage() //
@@ -33,3 +42,4 @@ async function banlistLoad(server) {
 	}, 6000)
 }
 banlistLoad('1rp')
+module.exports = fullBans
