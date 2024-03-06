@@ -8,9 +8,6 @@ app.get('/', async (req, res) => {
 	res.send('go to /banlist/web/ ( 1rp / 2rp / rpg )')
 })
 app.get('/banlist/web/:server', async (req, res) => {
-	// if (fullBans[req.params.server]){
-	// 	answer
-	// }
 	res.json(fullBans[req.params.server])
 })
 app.listen(port, () => {
