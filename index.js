@@ -1,18 +1,21 @@
 const express = require('express')
-const puppeteer = require('puppeteer')
 const port = process.env.PORT || 3000
 const app = express()
 app.use(express.json())
 
-app.get('/', async (req, res) => {
-	res.send('go to /banlist/web/ ( 1rp / 2rp / rpg )')
-})
-app.get('/banlist/web/:server', async (req, res) => {
-	res.json(fullBans[req.params.server])
-})
-app.listen(port, () => {
-	console.log(`Server listening on port ${port}`)
-})
+const puppeteer = require('puppeteer')
+const fs = require('fs')
+const cron = require('node-cron')
+
+function decodeUnicodeEscapes(text) {
+	return text.replace(/\\u([\d\w]{4})|\\/gi, function (match, grp) {
+		if (match === '\\') {
+			return ''
+		} else {
+			return String.fromCharCode(parseInt(grp, 16))
+		}
+	})
+}
 const fullBans = {
 	rpg: [],
 	'1rp': [],
@@ -27,31 +30,44 @@ async function banlistLoad(server) {
 
 	setTimeout(async () => {
 		const content = await page.content()
-		const decodedText = content.replace(
-			/\\u([\d\w]{4})|\\/gi,
-			function (match, grp) {
-				if (match === '\\') {
-					return ''
+		const decodedText = decodeUnicodeEscapes(content)
+		const matches = decodedText.match(/\[(\d{2}:\d{2}:\d{4})\].*?\..*?/g)
+		const result = matches.map(match => match.slice(0, -1) + '.')
+		await browser.close()
+		fullBans[server] = JSON.stringify(result)
+		fs.writeFile(
+			`./public/banlists/${server}banlist.json`,
+			JSON.stringify(result),
+			err => {
+				if (err) {
+					console.error('Error:', err)
 				} else {
-					return String.fromCharCode(parseInt(grp, 16))
+					console.log(`Done: ${server}.`)
 				}
 			}
 		)
-		const matches = decodedText.match(/\[(\d{2}:\d{2}:\d{4})\].*?\..*?/g)
-		const result = await matches.map(match => match.slice(0, -1) + '.')
-		await browser.close()
-		fullBans[server] = result
 	}, 6000)
 }
-async function startApp() {
-	try {
-		await banlistLoad('rpg')
-		await banlistLoad('1rp')
-		await banlistLoad('2rp')
-		console.log('Приложение запущено')
-	} catch (error) {
-		console.error('Ошибка при запуске приложения:', error)
+cron.schedule(
+	'* * * * *',
+	() => {
+		banlistLoad('1rp')
+		banlistLoad('2rp')
+		banlistLoad('rpg')
+	},
+	{
+		scheduled: true,
+		timezone: 'Europe/Moscow',
 	}
-}
+)
 
-startApp()
+app.get('/', async (req, res) => {
+	res.send('go to /banlist/web/ ( 1rp / 2rp / rpg )')
+})
+app.get('/banlist/web/:server', async (req, res) => {
+	const banlist = require(`./public/banlists/${req.params.server}banlist.json`)
+	res.json(banlist)
+})
+app.listen(port, () => {
+	console.log(`Server listening on port ${port}`)
+})
