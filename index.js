@@ -5,14 +5,14 @@ const app = express()
 app.use(express.json())
 
 app.get('/', async (req, res) => {
+	banlistLoad('rpg')
+	banlistLoad('1rp')
+	banlistLoad('2rp')
 	res.send('go to /banlist/web/ ( 1rp / 2rp / rpg )')
 })
 app.get('/banlist/web/:server', async (req, res) => {
 	res.json(fullBans[req.params.server])
 })
-banlistLoad('rpg')
-banlistLoad('1rp')
-banlistLoad('2rp')
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`)
 })
