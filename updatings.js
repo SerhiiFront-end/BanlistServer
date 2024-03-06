@@ -1,19 +1,5 @@
 const puppeteer = require('puppeteer')
 
-// function decodeUnicodeEscapes(text) {
-// 	return text.replace(/\\u([\d\w]{4})|\\/gi, function (match, grp) {
-// 		if (match === '\\') {
-// 			return ''
-// 		} else {
-// 			return String.fromCharCode(parseInt(grp, 16))
-// 		}
-// 	})
-// }
-const fullBans = {
-	rpg: [],
-	'1rp': [],
-	'2rp': [],
-}
 async function banlistLoad(server) {
 	const browser = await puppeteer.launch({ headless: 'new' })
 	const page = await browser.newPage() //
@@ -37,7 +23,7 @@ async function banlistLoad(server) {
 		const matches = decodedText.match(/\[(\d{2}:\d{2}:\d{4})\].*?\..*?/g)
 		const result = matches.map(match => match.slice(0, -1) + '.')
 		await browser.close()
-		fullBans[server] = result
 	}, 6000)
+	return result
 }
-module.exports = { fullBans, banlistLoad }
+module.exports = { banlistLoad: banlistLoad }
