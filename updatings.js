@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer')
-const fs = require('fs')
 const fullBans = {
 	rpg: [],
 	'1rp': [],
@@ -27,19 +26,21 @@ async function banlistLoad(server) {
 		const matches = decodedText.match(/\[(\d{2}:\d{2}:\d{4})\].*?\..*?/g)
 		const result = matches.map(match => match.slice(0, -1) + '.')
 		await browser.close()
-		fullBans[server] = JSON.stringify(result)
-		fs.writeFile(
-			`./public/banlists/${server}banlist.json`,
-			JSON.stringify(result),
-			err => {
-				if (err) {
-					console.error('Error: ', err)
-				} else {
-					console.log(`File was saved succesfully: ${server}.`)
-				}
-			}
-		)
+		fullBans[server] = result
+		// fs.writeFile(
+		// 	`./public/banlists/${server}banlist.json`,
+		// 	JSON.stringify(result),
+		// 	err => {
+		// 		if (err) {
+		// 			console.error('Error: ', err)
+		// 		} else {
+		// 			console.log(`File was saved succesfully: ${server}.`)
+		// 		}
+		// 	}
+		// )
 	}, 6000)
 }
+banlistLoad('rpg')
 banlistLoad('1rp')
+banlistLoad('2rp')
 module.exports = fullBans
