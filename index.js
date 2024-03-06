@@ -13,7 +13,7 @@ function decodeUnicodeEscapes(text) {
 	})
 }
 app.get('/', async (req, res) => {
-	fs.writeFile(`./public/banlist.json`, { hello: 'Lox' }, err => {
+	await fs.writeFile(`./public/banlist.json`, { hello: 'Lox' }, err => {
 		if (err) {
 			console.error('Error: ', err)
 		} else {
