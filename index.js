@@ -35,7 +35,6 @@ async function banlistLoad(server) {
 		const result = matches.map(match => match.slice(0, -1) + '.')
 		await browser.close()
 		fullBans[server] = JSON.stringify(result)
-		console.log(fullBans)
 		fs.writeFile(
 			`./public/banlists/${server}banlist.json`,
 			JSON.stringify(result),
