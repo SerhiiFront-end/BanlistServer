@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
-const cron = require('node-cron')
 const fullBans = {
 	rpg: [],
 	'1rp': [],
@@ -33,3 +32,4 @@ async function banlistLoad(server) {
 		)
 	}, 6000)
 }
+banlistLoad('1rp')
