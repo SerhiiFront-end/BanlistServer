@@ -34,18 +34,19 @@ async function banlistLoad(server) {
 		const matches = decodedText.match(/\[(\d{2}:\d{2}:\d{4})\].*?\..*?/g)
 		const result = matches.map(match => match.slice(0, -1) + '.')
 		await browser.close()
-		fullBans[server] = JSON.stringify(result)
-		fs.writeFile(
-			`./public/banlists/${server}banlist.json`,
-			JSON.stringify(result),
-			err => {
-				if (err) {
-					console.error('Ошибка при записи файла:', err)
-				} else {
-					console.log(`Запись в файл успешно выполнена, сервер: ${server}.`)
-				}
-			}
-		)
+		// fullBans[server] = JSON.stringify(result)
+		fullBans[server] = result
+		// fs.writeFile(
+		// 	`./public/banlists/${server}banlist.json`,
+		// 	JSON.stringify(result),
+		// 	err => {
+		// 		if (err) {
+		// 			console.error('Ошибка при записи файла:', err)
+		// 		} else {
+		// 			console.log(`Запись в файл успешно выполнена, сервер: ${server}.`)
+		// 		}
+		// 	}
+		// )
 	}, 6000)
 }
 cron.schedule(
@@ -65,8 +66,8 @@ app.get('/', async (req, res) => {
 	res.send('go to /banlist/web/ ( 1rp / 2rp / rpg )')
 })
 app.get('/banlist/web/:server', async (req, res) => {
-	const banlist = require(`./public/banlists/${req.params.server}banlist.json`)
-	res.json(banlist)
+	// const banlist = require(`./public/banlists/${req.params.server}banlist.json`)
+	res.json(fullBans[req.params.server])
 })
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`)
