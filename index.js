@@ -10,10 +10,10 @@ app.get('/', async (req, res) => {
 app.get('/banlist/web/:server', async (req, res) => {
 	res.json(fullBans[req.params.server])
 })
+banlistLoad('rpg')
+banlistLoad('1rp')
+banlistLoad('2rp')
 app.listen(port, () => {
-	banlistLoad('rpg')
-	banlistLoad('1rp')
-	banlistLoad('2rp')
 	console.log(`Server listening on port ${port}`)
 })
 const fullBans = {
