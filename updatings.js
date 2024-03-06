@@ -43,4 +43,4 @@ async function banlistLoad(server) {
 banlistLoad('rpg')
 banlistLoad('1rp')
 banlistLoad('2rp')
-module.exports = fullBans
+module.exports = { fullBans }
