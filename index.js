@@ -49,7 +49,7 @@ async function banlistLoad(server) {
 	}, 6000)
 }
 cron.schedule(
-	'* * * * *',
+	'*/30 * * * * *',
 	() => {
 		banlistLoad('1rp')
 		banlistLoad('2rp')
